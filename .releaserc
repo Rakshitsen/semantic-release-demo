@@ -1,7 +1,22 @@
 {
-  "branches": ["main", { "name": "develop", "prerelease": true }],
+  "branches": [
+    "main",
+    { "name": "develop", "prerelease": "develop" }
+  ],
   "plugins": [
-    "@semantic-release/commit-analyzer",
+    [
+      "@semantic-release/commit-analyzer",
+      {
+        "releaseRules": [
+          { "type": "feat", "release": "minor", "branch": "develop" },
+          { "type": "feat", "release": false, "branch": "main" },
+
+          { "type": "fix", "release": "patch" },
+          { "type": "chore", "release": false },
+          { "type": "docs", "release": false }
+        ]
+      }
+    ],
     "@semantic-release/release-notes-generator",
     "@semantic-release/git"
   ]
