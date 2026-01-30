@@ -1,6 +1,10 @@
 pipeline {
   agent any
 
+  parameters {
+    booleanParam(name: 'DRY_RUN', defaultValue: true, description: 'semantic-release dry run')
+  }
+
   environment {
     GITHUB_TOKEN = credentials('github-token-id')
     CI = 'true'
@@ -10,24 +14,34 @@ pipeline {
 
     stage('Info') {
       steps {
-        echo "Branch detected by Jenkins: ${env.BRANCH_NAME}"
+        echo "Branch: ${env.BRANCH_NAME}, DryRun: ${params.DRY_RUN}"
       }
     }
 
     stage('Install') {
       steps {
-        sh 'npm ci || npm install'
+        sh '''
+          if [ -f package.json ]; then
+            npm ci || npm install
+          else
+            echo "No package.json, skipping install"
+          fi
+        '''
       }
     }
 
     stage('Semantic Release') {
       when {
-        expression {
-          env.BRANCH_NAME == 'main' || env.BRANCH_NAME == 'develop'
-        }
+        expression { env.BRANCH_NAME == 'main' || env.BRANCH_NAME == 'develop' }
       }
       steps {
-        sh 'npx semantic-release'
+        sh '''
+          if [ "${DRY_RUN}" = "true" ]; then
+            npx semantic-release --dry-run
+          else
+            npx semantic-release
+          fi
+        '''
       }
     }
   }
