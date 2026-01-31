@@ -1,19 +1,20 @@
 {
-  "branches": [
-    "main",
-    { "name": "develop", "prerelease": "develop" }
-  ],
+  "branches": ["main", { "name": "develop", "prerelease": "develop" }],
   "plugins": [
     [
       "@semantic-release/commit-analyzer",
       {
+        "preset": "conventionalcommits",
+        "parserOpts": {
+          "mergePattern": "^Merge pull request #\\d+ from .*$",
+          "mergeCorrespondence": ["id", "source"]
+        },
         "releaseRules": [
-          { "type": "feat", "release": "minor", "branch": "develop" },
-          { "type": "feat", "release": false, "branch": "main" },
-
+          { "type": "feat", "branch": "main", "release": false },
+          { "type": "feat", "branch": "develop", "release": "minor" },
           { "type": "fix", "release": "patch" },
-          { "type": "chore", "release": false },
-          { "type": "docs", "release": false }
+          { "type": "docs", "release": false },
+          { "type": "chore", "release": false }
         ]
       }
     ],
