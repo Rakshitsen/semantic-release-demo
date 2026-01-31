@@ -1,11 +1,7 @@
 {
   "branches": [
     "main",
-    { "name": "develop", "prerelease": "develop" },
-    {
-      "name": "hotfix/*",
-      "prerelease": false
-    }
+    { "name": "develop", "prerelease": "develop" }
   ],
   "plugins": [
     [
@@ -19,17 +15,20 @@
         "releaseRules": [
           { "type": "feat", "branch": "main", "release": false },
           { "type": "feat", "branch": "develop", "release": "minor" },
-          { "type": "feat", "branch": "hotfix/*", "release": false },
-
-          { "type": "fix", "branch": "hotfix/*", "release": "patch" },
           { "type": "fix", "release": "patch" },
-
           { "type": "docs", "release": false },
           { "type": "chore", "release": false }
         ]
       }
     ],
     "@semantic-release/release-notes-generator",
-    "@semantic-release/git"
+    "@semantic-release/changelog",
+    [
+      "@semantic-release/git",
+      {
+        "assets": ["CHANGELOG.md", "package.json", "package-lock.json"],
+        "message": "chore(release): ${nextRelease.version} [skip ci]"
+      }
+    ]
   ]
 }

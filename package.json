@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/Rakshitsen/semantic-release-demo#readme",
   "devDependencies": {
+    "@semantic-release/changelog": "^6.0.3",
     "@semantic-release/commit-analyzer": "^13.0.1",
     "@semantic-release/git": "^10.0.1",
     "@semantic-release/release-notes-generator": "^14.1.0",
