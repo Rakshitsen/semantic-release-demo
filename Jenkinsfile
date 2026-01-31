@@ -31,9 +31,11 @@ pipeline {
     }
 
     stage('Semantic Release') {
-      when {
-        expression { env.BRANCH_NAME == 'main' || env.BRANCH_NAME == 'develop' }
-      }
+   when{
+    expression {
+      env.BRANCH_NAME == 'develop' ||
+      (env.BRANCH_NAME == 'main' && params.DRY_RUN == false)
+    }}
       steps {
         sh '''
           if [ "${DRY_RUN}" = "true" ]; then
